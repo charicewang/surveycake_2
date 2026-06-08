@@ -1,88 +1,66 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>研究問卷</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
+        /* 讓整個畫面置中（電腦＋手機都適用） */
         body {
             margin: 0;
-            min-height: 100vh;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;   /* 水平置中 */
+            align-items: center;       /* 垂直置中 */
+            min-height: 100vh;         /* 滿版高度 */
         }
 
+        /* 主要內容卡片 */
         .container {
-            width: 100%;
-            max-width: 450px;
-
             background: white;
-            padding: 32px;
+            padding: 24px;
             border-radius: 12px;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 420px;  /* 電腦版不會太寬 */
             text-align: center;
         }
 
         h2 {
             margin-top: 0;
-            margin-bottom: 16px;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 20px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            font-size: 16px;
-
-            border: 1px solid #ccc;
-            border-radius: 8px;
-
+            padding: 10px;
+            margin-top: 10px;
             margin-bottom: 16px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
 
         button {
             width: 100%;
-            padding: 12px;
-
+            padding: 10px;
             font-size: 16px;
+            background: #4a90e2;
+            color: white;
             border: none;
             border-radius: 8px;
-
             cursor: pointer;
-
-            background-color: #4CAF50;
-            color: white;
         }
 
         button:hover {
-            opacity: 0.9;
+            background: #357bd8;
         }
 
+        /* 手機微調 */
         @media (max-width: 480px) {
             .container {
-                padding: 24px;
-            }
-
-            h2 {
-                font-size: 22px;
+                padding: 18px;
+                border-radius: 10px;
             }
         }
     </style>
@@ -90,60 +68,45 @@
 
 <body>
 
-    <div class="container">
+<div class="container" id="main">
+    <h2>研究參與資格確認</h2>
 
-        <h2>研究參與資格確認</h2>
+    <p>請輸入您的年齡：</p>
+    <input type="number" id="age" min="0" max="120" placeholder="請輸入年齡">
 
-        <p>本研究僅招募年滿 18 歲之參與者。</p>
+    <button onclick="startSurvey()">開始作答</button>
+</div>
 
-        <input type="number" id="age" min="0" max="120" placeholder="請輸入您的年齡">
+<script>
+function startSurvey() {
 
-        <button onclick="startSurvey()">
-            開始填寫問卷
-        </button>
+    const age = parseInt(document.getElementById("age").value);
 
-    </div>
+    if (isNaN(age)) {
+        alert("請輸入年齡");
+        return;
+    }
 
-    <script>
-        function startSurvey() {
+    if (age < 18) {
+        document.getElementById("main").innerHTML = `
+            <h2>不符合參與資格</h2>
+            <p>本研究僅招募年滿18歲之參與者。</p>
+        `;
+        return;
+    }
 
-            const age = parseInt(
-                document.getElementById("age").value
-            );
+    const links = [
+        "https://www.surveycake.com/s/z2awX",
+        "https://www.surveycake.com/s/42NaQ",
+        "https://www.surveycake.com/s/LOmpY",
+        "https://www.surveycake.com/s/3XePr"
+    ];
 
-            if (isNaN(age)) {
-                alert("請輸入年齡");
-                return;
-            }
+    const randomIndex = Math.floor(Math.random() * links.length);
 
-            if (age < 18) {
-
-                document.querySelector(".container").innerHTML = `
-                    <h2>不符合參與資格</h2>
-                    <p>
-                        感謝您的參與。<br>
-                        本研究僅招募年滿 18 歲之受試者。
-                    </p>
-                `;
-
-                return;
-            }
-
-            const links = [
-                "https://www.surveycake.com/s/z2awX",
-                "https://www.surveycake.com/s/42NaQ",
-                "https://www.surveycake.com/s/LOmpY",
-                "https://www.surveycake.com/s/3XePr"
-            ];
-
-            const randomIndex =
-                Math.floor(Math.random() * links.length);
-
-            window.location.href =
-                links[randomIndex];
-        }
-    </script>
+    window.location.href = links[randomIndex];
+}
+</script>
 
 </body>
-
 </html>
